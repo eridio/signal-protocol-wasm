@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>"Signal protocol implementation</title>
+    <link type="style" src="./style.css">
+
+
+    <script type="module">
+        
+      import init, {key_init_alice, key_init_bob,calculate_master_key_alice, calculate_master_key_bob} from './pkg/helloworld.js'
+
+      async function run() {
+        await init()
+        document.body.textContent = helloworld()
+      }
+
+      async function init_alice(){
+        await init()
+        let init_alice = key_init_alice()
+        let json = JSON.parse(init_alice)
+
+        localStorage.setItem("alice_bundle" , JSON.stringify(json))
+        let bundle_complete = localStorage.getItem("alice_bundle")
+        
+        //console.log(JSON.parse(bundle_complete).bundle_keep)
+
+       // console.log(json.bundle_server)
+       console.log("INIT DONE")
+
+      }
+      async function init_bob(){
+        await init()
+        let init_bob = key_init_bob()
+        let json = JSON.parse(init_bob)
+        localStorage.setItem("bob_bundle" , JSON.stringify(json))
+       // console.log(json.bundle_keep)
+       console.log("INIT DONE")
+      }
+
+      async function master_key_alice(){
+        await init()
+        let alice_local = JSON.parse(localStorage.getItem("alice_bundle"))
+        let bob_server = JSON.parse(localStorage.getItem("bob_bundle"))
+        // console.log(alice_local)
+        // console.log(bob_server)
+        //console.log(JSON.stringify(alice_local.bundle_keep))
+
+        //console.log(JSON.stringify(bob_server.bundle_server))
+        let master_key_alice_part = calculate_master_key_alice(JSON.stringify(bob_server.bundle_server),JSON.stringify(alice_local.bundle_keep))
+        console.log(master_key_alice_part)
+        
+        // let json = JSON.parse(master_key_alice_part)
+        // console.log(json)
+      }
+      async function master_key_bob(){
+        await init()
+        let alice_local = JSON.parse(localStorage.getItem("alice_bundle"))
+        let bob_server = JSON.parse(localStorage.getItem("bob_bundle"))
+        // console.log(alice_local)
+        // console.log(bob_server)
+        //console.log(JSON.stringify(alice_local.bundle_keep))
+
+        //console.log(JSON.stringify(bob_server.bundle_server))
+        let master_key_bob_part = calculate_master_key_bob(JSON.stringify(bob_server.bundle_keep),JSON.stringify(alice_local.bundle_server))
+        console.log(master_key_bob_part)
+        
+        // let json = JSON.parse(master_key_alice_part)
+        // console.log(json)
+      }
+
+      
+
+       var myElem = document.getElementById("alice_init")
+            myElem.onclick = function() {
+              init_alice()
+	 
+      }
+      var myElembob = document.getElementById("bob_init")
+            myElembob.onclick = function() {
+              init_bob() 
+      }
+      var masterKeyAliceInit = document.getElementById("alice_calcul_master")
+          masterKeyAliceInit.onclick = function() {
+              master_key_alice() 
+      }
+
+      var masterKeyBobInit = document.getElementById("bob_calcul_master")
+          masterKeyBobInit.onclick = function() {
+              master_key_bob() 
+      }
+      
+    </script>
+  </head>
+
+  <body style="background-color: rgb(0, 0, 0);">
+
+
+    <button id="bob_init" >init bob key</button>
+    <button id="alice_init" style="float: right;">init alice key</button>
+    
+    <button id="bob_calcul_master" >MASTER KEY!!</button>
+    <button id="alice_calcul_master" style="float: right;">MASTER KEY!!</button>
+
+    <input id="message_bob" placeholder="bob message"></input>
+    <input id="message_alice" placeholder="message alice" style="float: right;"></input>
+    
+    <button id="bob_send_message" >ENVOI</button>
+    <button id="alice_send_message" style="float: right;">ENVOI</button>
+
+    <!-- <input id="pass" type="text">
+    <button id="pass_but">derive</button> 
+     -->
+  </body>
+</html>
