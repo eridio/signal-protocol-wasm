@@ -18,7 +18,7 @@ jS: https://github.com/blockrockettech/signal-webapp
 
  https://github.com/Dione-Software/x3dh-ke
 
-
+ 
  etapes echanges messages :
     - registration ID and store it
     - generate an identity key pair and store it 
@@ -34,3 +34,9 @@ jS: https://github.com/blockrockettech/signal-webapp
     - envoie le premier message avec double ratchet 
 
     
+
+
+a changer : 
+   - 2 key init -> envois au serveur
+   - alice_init_ratchet envoyer dans le premier message la clef public de bob (web rtc uniquement)
+   - clean localstorage a la fin de la com
